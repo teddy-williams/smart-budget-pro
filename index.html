@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Smart Budget Pro — Cape Town's Personal Finance App</title>
+<style>
+:root{
+  --dark:#0D1B2A;--green:#1D9E75;--red:#D85A30;--amber:#BA7517;
+  --bg:#F5F4F0;--card:#fff;--border:#E8E5DE;--text:#1A1A18;--muted:#9B9A92;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:#fff;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+nav{background:var(--dark);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.nav-logo{color:#fff;font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.nav-links{display:flex;align-items:center;gap:16px;}
+.nav-link{color:#8CAFC9;font-size:13px;cursor:pointer;transition:color .15s;}
+.nav-link:hover{color:#fff;}
+.nav-cta{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0D1B2A 0%,#0f2d1e 60%,#0D1B2A 100%);padding:80px 24px 90px;text-align:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(29,158,117,.15);border:0.5px solid var(--green);border-radius:20px;padding:5px 14px;font-size:12px;color:#6ECFA8;margin-bottom:22px;}
+.hero h1{font-size:clamp(28px,6vw,52px);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.1;margin-bottom:18px;}
+.hero h1 span{color:var(--green);}
+.hero-sub{font-size:16px;color:#8CAFC9;max-width:520px;margin:0 auto 32px;line-height:1.6;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+.btn-primary{background:var(--green);color:#fff;border:none;border-radius:10px;padding:14px 28px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .15s;}
+.btn-primary:hover{background:#16875f;transform:translateY(-1px);}
+.btn-secondary{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+.hero-note{font-size:12px;color:#5C7D99;}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:48px;padding-top:40px;border-top:0.5px solid rgba(255,255,255,.07);}
+.hero-stat{text-align:center;}
+.hero-stat-val{font-size:28px;font-weight:800;color:#fff;}
+.hero-stat-lbl{font-size:12px;color:#5C7D99;margin-top:2px;}
+
+/* FEATURES */
+.section{padding:72px 24px;}
+.section-dark{background:var(--dark);}
+.section-grey{background:#F8F7F4;}
+.section-label{font-size:11px;color:var(--green);text-transform:uppercase;letter-spacing:2px;font-weight:700;text-align:center;margin-bottom:10px;}
+.section-title{font-size:clamp(22px,4vw,36px);font-weight:900;text-align:center;letter-spacing:-0.5px;margin-bottom:12px;}
+.section-title-light{color:#fff;}
+.section-sub{font-size:15px;color:var(--muted);text-align:center;max-width:500px;margin:0 auto 52px;}
+.section-sub-light{color:#8CAFC9;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:900px;margin:0 auto;}
+.feature-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:22px;transition:all .2s;}
+.feature-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,158,117,.1);}
+.feature-icon{font-size:28px;margin-bottom:12px;}
+.feature-title{font-size:15px;font-weight:800;margin-bottom:6px;}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+.feature-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:8px;text-transform:uppercase;letter-spacing:.5px;}
+.fb-free{background:#EAF7F2;color:var(--green);}
+.fb-premium{background:#FEF9EE;color:var(--amber);}
+
+/* COMPARISON TABLE */
+.compare-wrap{max-width:640px;margin:0 auto;}
+.compare-table{width:100%;border-collapse:collapse;}
+.compare-table th{padding:12px 16px;font-size:13px;font-weight:700;text-align:left;}
+.compare-table th:nth-child(2),.compare-table th:nth-child(3){text-align:center;}
+.compare-table td{padding:11px 16px;font-size:13px;border-top:0.5px solid rgba(255,255,255,.07);color:#8CAFC9;}
+.compare-table td:nth-child(2),.compare-table td:nth-child(3){text-align:center;}
+.col-free{color:#8CAFC9;}
+.col-pro{color:#6ECFA8;font-weight:700;}
+.check{color:var(--green);font-size:16px;}
+.cross{color:#555;font-size:16px;}
+.col-header-pro{color:#6ECFA8;}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:640px;margin:0 auto;}
+.price-card{border-radius:16px;padding:28px;border:0.5px solid var(--border);background:var(--card);position:relative;}
+.price-card.popular{border:2px solid var(--green);background:#fff;}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap;}
+.price-plan{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.price-val{font-size:38px;font-weight:900;letter-spacing:-1px;color:var(--text);}
+.price-val span{font-size:16px;font-weight:400;color:var(--muted);}
+.price-note{font-size:12px;color:var(--green);margin-top:4px;font-weight:700;}
+.price-features{list-style:none;margin:20px 0 24px;}
+.price-features li{font-size:13px;padding:5px 0;display:flex;align-items:flex-start;gap:8px;color:var(--muted);}
+.price-features li span:first-child{flex-shrink:0;font-size:15px;}
+.price-btn{width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:800;border:none;cursor:pointer;font-family:inherit;transition:all .15s;}
+.price-btn-outline{background:#fff;color:var(--dark);border:1.5px solid var(--border);}
+.price-btn-green{background:var(--green);color:#fff;}
+.price-btn-green:hover{background:#16875f;}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;max-width:800px;margin:0 auto;}
+.step{text-align:center;padding:20px;}
+.step-num{width:44px;height:44px;border-radius:50%;background:rgba(29,158,117,.15);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--green);margin:0 auto 14px;}
+.step-title{font-size:14px;font-weight:800;margin-bottom:6px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+
+/* PAYFAST */
+.payfast-section{background:var(--bg);border-radius:16px;padding:28px;max-width:500px;margin:0 auto;border:0.5px solid var(--border);}
+.payfast-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.payfast-methods{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.pay-method{background:#fff;border:0.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;}
+
+/* TESTIMONIALS */
+.testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:800px;margin:0 auto;}
+.testi-card{background:rgba(255,255,255,.05);border:0.5px solid rgba(255,255,255,.07);border-radius:14px;padding:20px;}
+.testi-stars{color:var(--amber);font-size:14px;margin-bottom:10px;}
+.testi-text{font-size:13px;color:#8CAFC9;line-height:1.6;margin-bottom:12px;}
+.testi-author{font-size:12px;font-weight:700;color:#fff;}
+.testi-loc{font-size:11px;color:#5C7D99;}
+
+/* CTA BOTTOM */
+.cta-bottom{background:linear-gradient(135deg,#0D1B2A,#0f2d1e);padding:80px 24px;text-align:center;}
+.cta-bottom h2{font-size:clamp(22px,4vw,36px);font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-0.5px;}
+.cta-bottom p{font-size:15px;color:#8CAFC9;margin-bottom:32px;}
+
+/* FOOTER */
+footer{background:var(--dark);padding:32px 24px;text-align:center;border-top:0.5px solid rgba(255,255,255,.06);}
+.footer-logo{font-size:16px;font-weight:800;color:#fff;margin-bottom:10px;}
+.footer-links{display:flex;gap:20px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+.footer-link{font-size:12px;color:#5C7D99;}
+.footer-copy{font-size:11px;color:#3a4a5a;}
+
+/* TRIAL MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
+.overlay.open{display:flex;}
+.modal{background:#fff;border-radius:20px;padding:32px;max-width:420px;width:100%;text-align:center;}
+.modal-icon{font-size:48px;margin-bottom:14px;}
+.modal-title{font-size:22px;font-weight:900;margin-bottom:8px;}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.trial-features{text-align:left;background:var(--bg);border-radius:10px;padding:14px;margin-bottom:20px;}
+.trial-feature{display:flex;gap:8px;font-size:13px;padding:4px 0;}
+.modal-form input{border:0.5px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;width:100%;margin-bottom:10px;outline:none;font-family:inherit;}
+.modal-form input:focus{border-color:var(--dark);}
+.modal-cta{width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;}
+.modal-skip{display:block;margin-top:12px;font-size:12px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:inherit;}
+
+@media(max-width:600px){
+  .hero{padding:56px 16px 64px;}
+  .section{padding:52px 16px;}
+  nav{padding:12px 16px;}
+  .nav-links .nav-link{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">💼 Smart Budget Pro</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#pricing">Pricing</a>
+    <a class="nav-link" href="#how">How it works</a>
+    <button class="nav-cta" onclick="openTrialModal()">Start Free Trial</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🇿🇦 Built for South Africa · Cape Town</div>
+  <h1>Manage your money.<br/><span>Build your future.</span></h1>
+  <div class="hero-sub">The smart budgeting app that doesn't just track your rands — it tells you exactly what to do with them to hit your career and life goals faster.</div>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="openTrialModal()">🚀 Start 14-Day Free Trial</button>
+    <a href="app.html"><button class="btn-secondary">View Demo App →</button></a>
+  </div>
+  <div class="hero-note">No credit card required · 14 days free · then R50/month · Cancel anytime</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-val">R50</div><div class="hero-stat-lbl">per month</div></div>
+    <div class="hero-stat"><div class="hero-stat-val">14</div><div class="hero-stat-lbl">day free trial</div></div>
+    <div class="hero-stat"><div class="hero-stat-val">7</div><div class="hero-stat-lbl">pre-loaded goals</div></div>
+    <div class="hero-stat"><div class="hero-stat-val">100%</div><div class="hero-stat-lbl">private & offline</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section section-grey" id="features">
+  <div class="section-label">Everything you need</div>
+  <div class="section-title">Built for real South African life</div>
+  <div class="section-sub">From learner's licence to CompTIA A+, driving lessons to saving for a car — Smart Budget Pro knows your goals and pushes you to hit them.</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <div class="feature-title">Monthly Mission Planner</div>
+      <div class="feature-desc">Every month, the app tells you exactly which 2–3 goals to focus on based on your income. No guessing, just doing.</div>
+      <span class="feature-badge fb-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-title">Smart Reminders</div>
+      <div class="feature-desc">Reminded to book your learner's test, research driving schools, register your domain. Never forget an action step again.</div>
+      <span class="feature-badge fb-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Goal Tracker with ROI</div>
+      <div class="feature-desc">See which goals give the biggest return on investment. CompTIA A+ unlocks R5k–R15k/month. Your jersey? Not so much.</div>
+      <span class="feature-badge fb-free">Free</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <div class="feature-title">6-Month Roadmap</div>
+      <div class="feature-desc">Simulates your financial future month by month. See exactly when you'll hit each goal at your current savings rate.</div>
+      <span class="feature-badge fb-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔮</div>
+      <div class="feature-title">What-If Simulator</div>
+      <div class="feature-desc">Cut R200 from transport — how much faster do you reach your A+ goal? Sliders show the impact instantly.</div>
+      <span class="feature-badge fb-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💸</div>
+      <div class="feature-title">Budget Control</div>
+      <div class="feature-desc">6 editable budget categories. Track spending. See the 50/30/20 rule check. Know exactly where every rand goes.</div>
+      <span class="feature-badge fb-free">Free</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚀</div>
+      <div class="feature-title">Career Milestone Tracker</div>
+      <div class="feature-desc">Link career actions to financial goals. Book DLTC test. Register CompTIA. Build your portfolio site. Track it all.</div>
+      <span class="feature-badge fb-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <div class="feature-title">Skill-to-Income Projector</div>
+      <div class="feature-desc">Log your new salary after earning your A+ certification. Watch all your goal ETAs recalculate in real time.</div>
+      <span class="feature-badge fb-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">100% Private</div>
+      <div class="feature-desc">No ads. No tracking. No data sold. PIN-protected. Your financial data never leaves your device.</div>
+      <span class="feature-badge fb-free">Free</span>
+    </div>
+  </div>
+</div>
+
+<!-- FREE vs PREMIUM TABLE -->
+<div class="section section-dark">
+  <div class="section-label">Compare plans</div>
+  <div class="section-title section-title-light">Free vs Premium</div>
+  <div class="section-sub section-sub-light">Start free, upgrade when you're ready.</div>
+  <div class="compare-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="color:#8CAFC9;">Feature</th>
+          <th class="col-free" style="color:#5C7D99;">Free</th>
+          <th class="col-header-pro">Premium R50/m</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Goal Tracker (7 goals)</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Budget Categories</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Expense Recording</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>50/30/20 Rule Check</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>PIN Lock</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Export CSV / JSON</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Monthly Mission Planner</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Smart Reminders + Alerts</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>6-Month Goal Roadmap</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>What-If Simulator</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Career Milestone Tracker</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Skill-to-Income Projector</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Smart Savings Allocator</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Sinking Funds</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Side Income Logger</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Daily Encouragement</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Unlimited Custom Goals</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Priority Support</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section" id="pricing">
+  <div class="section-label">Simple pricing</div>
+  <div class="section-title">One plan. Everything included.</div>
+  <div class="section-sub">Start free for 14 days. No credit card needed. Cancel anytime.</div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-plan">Free</div>
+      <div class="price-val">R0<span>/month</span></div>
+      <div class="price-note" style="color:var(--muted);">Always free</div>
+      <ul class="price-features">
+        <li><span>✅</span><span>Goal tracker (7 goals)</span></li>
+        <li><span>✅</span><span>Budget categories</span></li>
+        <li><span>✅</span><span>Expense recording</span></li>
+        <li><span>✅</span><span>50/30/20 rule check</span></li>
+        <li><span>✅</span><span>PIN protection</span></li>
+        <li><span style="color:#ccc;">—</span><span style="color:#ccc;">No planner or reminders</span></li>
+        <li><span style="color:#ccc;">—</span><span style="color:#ccc;">No roadmap or simulator</span></li>
+      </ul>
+      <button class="price-btn price-btn-outline" onclick="window.location.href='app.html'">Use for free →</button>
+    </div>
+    <div class="price-card popular">
+      <div class="popular-badge">⭐ Most Popular</div>
+      <div class="price-plan">Premium</div>
+      <div class="price-val">R50<span>/month</span></div>
+      <div class="price-note">14-day free trial · No card needed</div>
+      <ul class="price-features">
+        <li><span>✅</span><span>Everything in Free</span></li>
+        <li><span>✅</span><span>Monthly Mission Planner</span></li>
+        <li><span>✅</span><span>Smart Reminders & Alerts</span></li>
+        <li><span>✅</span><span>6-Month Goal Roadmap</span></li>
+        <li><span>✅</span><span>What-If Simulator</span></li>
+        <li><span>✅</span><span>Career Milestone Tracker</span></li>
+        <li><span>✅</span><span>Unlimited custom goals</span></li>
+        <li><span>✅</span><span>Export CSV / JSON</span></li>
+        <li><span>✅</span><span>Priority support</span></li>
+      </ul>
+      <button class="price-btn price-btn-green" onclick="openTrialModal()">Start 14-Day Free Trial</button>
+    </div>
+  </div>
+
+  <!-- Payment methods -->
+  <div style="text-align:center;margin-top:36px;">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Secure payments powered by</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
+      <div style="background:var(--dark);color:#fff;font-size:13px;font-weight:800;padding:6px 14px;border-radius:8px;">PayFast</div>
+      <span style="font-size:12px;color:var(--muted);">South Africa's #1 payment gateway</span>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <div class="pay-method">💳 Visa / Mastercard</div>
+      <div class="pay-method">🏦 EFT / Instant EFT</div>
+      <div class="pay-method">📱 SnapScan</div>
+      <div class="pay-method">💰 Ozow</div>
+      <div class="pay-method">📲 Mobicred</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:14px;">🔒 256-bit SSL encryption · PCI DSS compliant · Cancel anytime</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section section-grey" id="how">
+  <div class="section-label">Getting started</div>
+  <div class="section-title">Live in 60 seconds</div>
+  <div class="section-sub">No downloads. No setup. Open in any browser and you're tracking.</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Sign up free</div>
+      <div class="step-desc">Enter your email and start your 14-day trial. No credit card, no stress.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Set your income</div>
+      <div class="step-desc">Enter your monthly salary. The app instantly maps your goals and creates your monthly plan.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Follow your plan</div>
+      <div class="step-desc">Your Monthly Mission tells you exactly which goals to tackle this month. Reminders keep you on track.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">Watch goals fall</div>
+      <div class="step-desc">Hit learner's licence, then driving, then CompTIA A+. The roadmap shows your future changing in real time.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="section section-dark">
+  <div class="section-label">What people say</div>
+  <div class="section-title section-title-light">Real results, real people</div>
+  <div class="section-sub section-sub-light">South Africans building their future one rand at a time.</div>
+  <div class="testimonials">
+    <div class="testi-card">
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <div class="testi-text">"Within the first month I booked my learner's test and started saving for driving lessons. Having the action steps right there made all the difference."</div>
+      <div class="testi-author">Thabo M.</div>
+      <div class="testi-loc">Johannesburg, Gauteng</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <div class="testi-text">"I never knew I was spending 45% on needs when I should be at 50%. The 50/30/20 check was eye-opening. I moved R300 to my savings and it changed everything."</div>
+      <div class="testi-author">Lerato K.</div>
+      <div class="testi-loc">Cape Town, Western Cape</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <div class="testi-text">"The What-If Simulator showed me that cutting R200 from transport would get me to my CompTIA A+ exam 2 months earlier. That's life-changing on a tight budget."</div>
+      <div class="testi-author">Sipho D.</div>
+      <div class="testi-loc">Durban, KZN</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="cta-bottom">
+  <h2>Start building your future today.</h2>
+  <p>14 days free. No credit card. Cancel anytime. Just results.</p>
+  <button class="btn-primary" style="font-size:16px;padding:16px 36px;" onclick="openTrialModal()">🚀 Start My Free Trial</button>
+  <div style="font-size:12px;color:#5C7D99;margin-top:16px;">then R50/month · Powered by PayFast · 🇿🇦 South African built</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">💼 Smart Budget Pro</div>
+  <div class="footer-links">
+    <a class="footer-link" href="#">Privacy Policy</a>
+    <a class="footer-link" href="#">Terms of Service</a>
+    <a class="footer-link" href="#">Support</a>
+    <a class="footer-link" href="app.html">Open App</a>
+  </div>
+  <div class="footer-copy">© 2025 Smart Budget Pro · Built in Cape Town 🇿🇦 · Powered by PayFast</div>
+</footer>
+
+<!-- TRIAL SIGNUP MODAL -->
+<div class="overlay" id="trial-overlay">
+  <div class="modal">
+    <div class="modal-icon">🚀</div>
+    <div class="modal-title">Start your free trial</div>
+    <div class="modal-sub">14 days of full Premium access. No credit card needed. Cancel anytime after.</div>
+    <div class="trial-features">
+      <div class="trial-feature"><span>✅</span><span>Monthly Mission Planner</span></div>
+      <div class="trial-feature"><span>✅</span><span>Smart Reminders & 6-Month Roadmap</span></div>
+      <div class="trial-feature"><span>✅</span><span>What-If Simulator & Career Tracker</span></div>
+      <div class="trial-feature"><span>✅</span><span>All Premium features unlocked</span></div>
+    </div>
+    <div class="modal-form">
+      <input type="text" id="trial-name" placeholder="Your first name"/>
+      <input type="email" id="trial-email" placeholder="Email address"/>
+      <button class="modal-cta" onclick="startTrial()">Start My Free Trial →</button>
+    </div>
+    <button class="modal-skip" onclick="closeTrialModal()">Maybe later</button>
+  </div>
+</div>
+
+<!-- PAYFAST SUBSCRIBE FORM (hidden, submitted programmatically) -->
+<form id="payfast-form" action="https://sandbox.payfast.co.za/eng/process" method="POST" style="display:none;">
+  <input type="hidden" name="merchant_id" value="YOUR_MERCHANT_ID"/>
+  <input type="hidden" name="merchant_key" value="YOUR_MERCHANT_KEY"/>
+  <input type="hidden" name="return_url" value="https://yourdomain.co.za/app.html?status=success"/>
+  <input type="hidden" name="cancel_url" value="https://yourdomain.co.za/app.html?status=cancelled"/>
+  <input type="hidden" name="notify_url" value="https://yourdomain.co.za/api/payfast-webhook"/>
+  <input type="hidden" name="name_first" id="pf-name" value=""/>
+  <input type="hidden" name="email_address" id="pf-email" value=""/>
+  <input type="hidden" name="m_payment_id" id="pf-payment-id" value=""/>
+  <input type="hidden" name="amount" value="50.00"/>
+  <input type="hidden" name="item_name" value="Smart Budget Pro Premium"/>
+  <input type="hidden" name="item_description" value="Monthly subscription — Smart Budget Pro Premium"/>
+  <input type="hidden" name="subscription_type" value="1"/>
+  <input type="hidden" name="billing_date" id="pf-billing-date" value=""/>
+  <input type="hidden" name="recurring_amount" value="50.00"/>
+  <input type="hidden" name="frequency" value="3"/>
+  <input type="hidden" name="cycles" value="0"/>
+</form>
+
+<script>
+function openTrialModal(){document.getElementById("trial-overlay").classList.add("open");}
+function closeTrialModal(){document.getElementById("trial-overlay").classList.remove("open");}
+document.getElementById("trial-overlay").addEventListener("click",e=>{if(e.target===document.getElementById("trial-overlay"))closeTrialModal();});
+
+function startTrial(){
+  const name=document.getElementById("trial-name").value.trim();
+  const email=document.getElementById("trial-email").value.trim();
+  if(!name){alert("Please enter your name.");return;}
+  if(!email||!email.includes("@")){alert("Please enter a valid email address.");return;}
+  // Store trial info locally
+  const trialStart=new Date().toISOString();
+  localStorage.setItem("sbp_trial_name",name);
+  localStorage.setItem("sbp_trial_email",email);
+  localStorage.setItem("sbp_trial_start",trialStart);
+  localStorage.setItem("sbp_tier","trial");
+  // Redirect to app
+  window.location.href="app.html?trial=new&name="+encodeURIComponent(name);
+}
+
+// Check URL params for payment return
+const params=new URLSearchParams(window.location.search);
+if(params.get("status")==="success"){
+  localStorage.setItem("sbp_tier","premium");
+  alert("🎉 Payment successful! Welcome to Smart Budget Pro Premium.");
+}
+if(params.get("status")==="cancelled"){
+  alert("Payment was cancelled. Your trial continues — no charge was made.");
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",e=>{e.preventDefault();document.querySelector(a.getAttribute("href"))?.scrollIntoView({behavior:"smooth"});});});
+</script>
+</body>
+</html>
