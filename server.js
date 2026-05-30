@@ -123,7 +123,7 @@ app.post("/api/payfast/initiate", async (req, res) => {
     merchant_key:      process.env.PAYFAST_MERCHANT_KEY,
     return_url:        `${process.env.FRONTEND_URL}/app.html?status=success`,
     cancel_url:        `${process.env.FRONTEND_URL}/app.html?status=cancelled`,
-    notify_url:        `${process.env.BACKEND_URL}/api/payfast/webhook`,
+    notify_url:        `${process.env.BACKEND_URL}https://smart-budget-pro-production.up.railway.app`,
     name_first:        name?.split(" ")[0] || "",
     name_last:         name?.split(" ").slice(1).join(" ") || "",
     email_address:     email,
