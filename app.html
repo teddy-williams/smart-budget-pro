@@ -822,11 +822,57 @@ function obNext(){
     save();
   }
   if(obStep===OB_TOTAL){
-    // Finish onboarding
-    localStorage.setItem('sbp_onboarded','1');
-    document.getElementById('onboarding').style.display='none';
-    renderAll();
-    if(isPremium())showEnc();
+    // ── Register user in Supabase via Railway ──
+    const name  = localStorage.getItem('sbp_trial_name');
+    const email = localStorage.getItem('sbp_trial_email');
+    const next  = document.getElementById('ob-next');
+    next.textContent = 'Setting up your account...';
+    next.disabled = true;
+
+    const finish = () => {
+      localStorage.setItem('sbp_onboarded','1');
+      document.getElementById('onboarding').style.display='none';
+      renderAll();
+      if(isPremium()) showEnc();
+    };
+
+    if(name && email){
+      fetch(`${API_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if(data.user){
+          // Trial started in Supabase — sync locally
+          localStorage.setItem('sbp_tier','trial');
+          localStorage.setItem('sbp_trial_start', new Date().toISOString());
+          toast('Account created! 14-day trial started ✓');
+        } else if(data.error && data.error.includes('already')){
+          // User already exists — sync their tier
+          return fetch(`${API_URL}/api/auth/status?email=${encodeURIComponent(email)}`)
+            .then(r => r.json())
+            .then(d => { if(d.tier) localStorage.setItem('sbp_tier', d.tier); });
+        }
+      })
+      .catch(() => {
+        // Server unreachable — start trial locally, sync later
+        if(!localStorage.getItem('sbp_trial_start')){
+          localStorage.setItem('sbp_tier','trial');
+          localStorage.setItem('sbp_trial_start', new Date().toISOString());
+        }
+        console.log('Info: Server unreachable — trial started locally');
+      })
+      .finally(() => {
+        next.disabled = false;
+        finish();
+      });
+    } else {
+      // No email — free tier locally
+      next.disabled = false;
+      finish();
+    }
     return;
   }
   obStep++;renderObDots();renderObStep();
