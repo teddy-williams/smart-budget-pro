@@ -1,2 +1,39 @@
+# ── Environment variables — NEVER commit these ──
 .env
 .env.local
+.env.production
+.env.development
+.env.staging
+
+# ── Node.js ──
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# ── OS files ──
+.DS_Store
+.DS_Store?
+Thumbs.db
+desktop.ini
+
+# ── Logs ──
+*.log
+logs/
+
+# ── Build output ──
+dist/
+build/
+
+# ── IDE / Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Sensitive config ──
+config/secrets.json
+*.pem
+*.key
+*.cert
