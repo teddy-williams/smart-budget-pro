@@ -186,6 +186,39 @@ select.inp{cursor:pointer;}
 .rm-goals{padding:4px 13px 10px;}
 .rm-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 9px;border-radius:20px;margin:4px 3px 0 0;font-weight:600;}
 
+
+/* ── ONBOARDING ── */
+#onboarding{position:fixed;inset:0;z-index:9000;display:flex;align-items:flex-end;justify-content:center;}
+.ob-backdrop{position:fixed;inset:0;background:rgba(13,27,42,0.92);}
+.ob-card{position:relative;background:#fff;border-radius:20px 20px 0 0;padding:28px 22px 24px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;animation:slideUp .3s ease;}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.ob-dots{display:flex;gap:6px;justify-content:center;margin-bottom:22px;}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:#E8E5DE;transition:all .3s;}
+.ob-dot.active{background:var(--dark);width:22px;border-radius:4px;}
+.ob-emoji{font-size:44px;text-align:center;margin-bottom:12px;}
+.ob-avatar-circle{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;margin:0 auto 14px;transition:all .3s;}
+.ob-title{font-size:20px;font-weight:900;text-align:center;margin-bottom:8px;letter-spacing:-0.3px;}
+.ob-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:20px;}
+.ob-features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.ob-feat{display:flex;align-items:center;gap:8px;font-size:13px;background:var(--bg);border-radius:9px;padding:10px;}
+.ob-income-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px;}
+.ob-chip{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
+.ob-chip.active,.ob-chip:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
+.ob-notif-card{background:#F0F9F5;border-radius:10px;padding:12px;margin-top:4px;}
+.ob-reminder-item{font-size:12px;color:#1A4A35;padding:5px 0;border-bottom:0.5px solid #C8EAD8;}
+.ob-reminder-item:last-child{border-bottom:none;}
+.ob-summary{background:var(--bg);border-radius:12px;padding:14px;margin-top:4px;}
+.ob-summary-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:0.5px solid var(--border);}
+.ob-summary-row:last-child{border-bottom:none;}
+.ob-nav{display:flex;gap:10px;margin-top:20px;}
+.ob-back-btn{flex:1;padding:13px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.ob-next-btn{flex:2;padding:13px;background:var(--dark);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .15s;}
+.ob-next-btn:hover{background:#1a3a5c;}
+.ob-next-btn.green{background:var(--green);}
+
+/* ── PROFILE AVATAR ── */
+.profile-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0;}
+
 /* ── EMPTY ── */
 .empty{text-align:center;padding:24px 0;color:#ccc;}
 
@@ -221,6 +254,82 @@ select.inp{cursor:pointer;}
     <button class="pin-btn" onclick="pk('ok')" style="background:rgba(29,158,117,.3);color:#6ECFA8;">✓</button>
   </div>
   <button class="pin-skip" id="pin-skip" onclick="pinSkip()">Skip / No PIN</button>
+</div>
+
+<!-- ONBOARDING WIZARD -->
+<div id="onboarding" style="display:none;">
+  <div class="ob-backdrop"></div>
+  <div class="ob-card">
+    <div class="ob-dots" id="ob-dots"></div>
+    <div class="ob-step" id="ob-step-1">
+      <div class="ob-emoji">💼</div>
+      <div class="ob-title">Welcome to Smart Budget Pro</div>
+      <div class="ob-sub">Cape Town's smartest personal finance app. Let's get you set up in 60 seconds.</div>
+      <div class="ob-features">
+        <div class="ob-feat"><span>🎯</span><span>Track goals with action steps</span></div>
+        <div class="ob-feat"><span>📅</span><span>Monthly mission planner</span></div>
+        <div class="ob-feat"><span>🔔</span><span>Smart reminders that push you</span></div>
+        <div class="ob-feat"><span>🗺️</span><span>6-month financial roadmap</span></div>
+      </div>
+    </div>
+    <div class="ob-step" id="ob-step-2" style="display:none;">
+      <div class="ob-avatar-circle" id="ob-avatar-preview">😊</div>
+      <div class="ob-title">What's your name?</div>
+      <div class="ob-sub">We'll personalise your experience and display this on your profile.</div>
+      <label class="lbl">First name</label>
+      <input class="inp" type="text" id="ob-name" placeholder="e.g. Teddy" oninput="updateObAvatar()"/>
+      <label class="lbl">Email address</label>
+      <input class="inp" type="email" id="ob-email" placeholder="e.g. you@email.com"/>
+      <div class="f11 clr-muted">Used for your account and premium access across all devices.</div>
+    </div>
+    <div class="ob-step" id="ob-step-3" style="display:none;">
+      <div class="ob-emoji">💵</div>
+      <div class="ob-title">What's your monthly income?</div>
+      <div class="ob-sub">Helps us build your budget and calculate how fast you reach each goal.</div>
+      <label class="lbl">Monthly income (R)</label>
+      <input class="inp" type="number" id="ob-income" placeholder="e.g. 7500"/>
+      <div class="ob-income-chips">
+        <button class="ob-chip" onclick="setObIncome(5000)">R5,000</button>
+        <button class="ob-chip" onclick="setObIncome(7500)">R7,500</button>
+        <button class="ob-chip" onclick="setObIncome(10000)">R10,000</button>
+        <button class="ob-chip" onclick="setObIncome(15000)">R15,000</button>
+      </div>
+      <label class="lbl" style="margin-top:10px;">Payday — day of month</label>
+      <input class="inp" type="number" id="ob-payday" placeholder="e.g. 25" min="1" max="31"/>
+    </div>
+    <div class="ob-step" id="ob-step-4" style="display:none;">
+      <div class="ob-emoji">🎯</div>
+      <div class="ob-title">Your goals are ready</div>
+      <div class="ob-sub">Pre-loaded 7 goals ranked by financial ROI. Edit or add your own anytime.</div>
+      <div id="ob-goals-preview"></div>
+    </div>
+    <div class="ob-step" id="ob-step-5" style="display:none;">
+      <div class="ob-emoji">🔔</div>
+      <div class="ob-title">Stay on track with reminders</div>
+      <div class="ob-sub">We'll remind you to book your learner's test, study for A+, and save toward every goal.</div>
+      <div class="ob-notif-card">
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Reminders already set for you:</div>
+        <div class="ob-reminder-item">📅 Book your Learner's Test — in 7 days</div>
+        <div class="ob-reminder-item">🔍 Research driving schools — in 14 days</div>
+        <div class="ob-reminder-item">📥 Download CompTIA A+ study guide — in 3 days</div>
+      </div>
+      <button class="btn btn-dark btn-wide" onclick="obRequestNotif()" id="ob-notif-btn" style="margin-top:14px;">🔔 Enable Notifications</button>
+      <div class="f11 clr-muted mt4" id="ob-notif-status"></div>
+    </div>
+    <div class="ob-step" id="ob-step-6" style="display:none;">
+      <div class="ob-emoji">🚀</div>
+      <div class="ob-title">You're all set, <span id="ob-done-name">friend</span>!</div>
+      <div class="ob-sub">Your personalised budget app is ready. Your Monthly Mission is waiting.</div>
+      <div class="ob-summary" id="ob-summary"></div>
+    </div>
+    <div class="ob-nav">
+      <button class="ob-back-btn" id="ob-back" onclick="obBack()" style="display:none;">← Back</button>
+      <button class="ob-next-btn" id="ob-next" onclick="obNext()">Get Started →</button>
+    </div>
+    <div style="text-align:center;margin-top:8px;">
+      <button style="background:none;border:none;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit;" onclick="obSkip()">Skip setup</button>
+    </div>
+  </div>
 </div>
 
 <!-- PAYWALL -->
@@ -586,22 +695,221 @@ select.inp{cursor:pointer;}
 
 <script>
 // ══════════ TIER SYSTEM ══════════
+// ══════════ CONFIG ══════════
+const API_URL = "https://smart-budget-pro-production.up.railway.app";
+
+
+// ══════════ AVATAR GENERATOR ══════════
+const AVATAR_COLORS = ['#D85A30','#1D9E75','#2563EB','#7C3AED','#BA7517','#0D1B2A','#D4537E','#378ADD'];
+function getAvatarColor(name){
+  if(!name)return AVATAR_COLORS[0];
+  let h=0;for(let i=0;i<name.length;i++)h=name.charCodeAt(i)+((h<<5)-h);
+  return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length];
+}
+function getInitials(name){
+  if(!name)return '?';
+  const p=name.trim().split(' ').filter(Boolean);
+  return p.length>=2?p[0][0].toUpperCase()+p[1][0].toUpperCase():p[0].slice(0,2).toUpperCase();
+}
+function avatarHTML(name,size=52,fontSize=20){
+  const col=getAvatarColor(name);const init=getInitials(name);
+  return `<div class="profile-avatar" style="width:${size}px;height:${size}px;background:${col};font-size:${fontSize}px;">${init}</div>`;
+}
+
+// ══════════ ONBOARDING WIZARD ══════════
+let obStep=1;const OB_TOTAL=6;
+
+function shouldShowOnboarding(){
+  return !localStorage.getItem('sbp_onboarded');
+}
+
+function startOnboarding(){
+  obStep=1;
+  document.getElementById('onboarding').style.display='flex';
+  renderObDots();renderObStep();
+}
+
+function obSkip(){
+  localStorage.setItem('sbp_onboarded','1');
+  document.getElementById('onboarding').style.display='none';
+}
+
+function renderObDots(){
+  const el=document.getElementById('ob-dots');
+  el.innerHTML=Array.from({length:OB_TOTAL},(_,i)=>
+    `<div class="ob-dot ${i+1===obStep?'active':''}"></div>`
+  ).join('');
+}
+
+function renderObStep(){
+  for(let i=1;i<=OB_TOTAL;i++){
+    const el=document.getElementById('ob-step-'+i);
+    if(el)el.style.display=i===obStep?'block':'none';
+  }
+  const back=document.getElementById('ob-back');
+  const next=document.getElementById('ob-next');
+  back.style.display=obStep>1?'flex':'none';
+  if(obStep===4){
+    // Render goals preview
+    const gp=document.getElementById('ob-goals-preview');
+    if(gp){
+      gp.innerHTML=DEF.goals.slice(0,5).map(g=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
+          <span style="font-size:18px;">${g.icon}</span>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:700;">${g.name}</div><div class="f11 clr-muted">${g.note}</div></div>
+          <div style="font-size:12px;font-weight:700;color:var(--green);">${fmt(g.target)}</div>
+          <span class="badge badge-${g.priority}">${PRI[g.priority].label}</span>
+        </div>`).join('')+`<div class="f11 clr-muted" style="margin-top:6px;">+ 2 more goals loaded ✓</div>`;
+    }
+  }
+  if(obStep===6){
+    const name=document.getElementById('ob-name')?.value||'friend';
+    const income=parseFloat(document.getElementById('ob-income')?.value)||S.income;
+    const payday=document.getElementById('ob-payday')?.value||S.paydayDay||'—';
+    document.getElementById('ob-done-name').textContent=name.split(' ')[0];
+    const sum=document.getElementById('ob-summary');
+    if(sum){sum.innerHTML=`
+      <div class="ob-summary-row"><span>👤 Name</span><span class="bold">${name}</span></div>
+      <div class="ob-summary-row"><span>💵 Monthly Income</span><span class="bold">${fmt(income)}</span></div>
+      <div class="ob-summary-row"><span>📅 Payday</span><span class="bold">Day ${payday} of month</span></div>
+      <div class="ob-summary-row"><span>🎯 Goals loaded</span><span class="bold">7 goals ready</span></div>
+      <div class="ob-summary-row"><span>🔔 Reminders</span><span class="bold">3 reminders set</span></div>
+    `;}
+    next.textContent='Open My App 🚀';next.className='ob-next-btn green';
+  } else if(obStep===OB_TOTAL-1){
+    next.textContent='Almost done →';next.className='ob-next-btn';
+  } else {
+    next.textContent=obStep===1?'Get Started →':'Next →';next.className='ob-next-btn';
+  }
+}
+
+function updateObAvatar(){
+  const name=document.getElementById('ob-name')?.value||'';
+  const el=document.getElementById('ob-avatar-preview');
+  if(!el)return;
+  if(name){
+    const col=getAvatarColor(name);const init=getInitials(name);
+    el.style.cssText=`width:72px;height:72px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin:0 auto 14px;`;
+    el.textContent=init;
+  } else {
+    el.style.cssText='font-size:44px;text-align:center;margin-bottom:12px;';
+    el.textContent='😊';
+  }
+}
+
+function setObIncome(val){
+  document.getElementById('ob-income').value=val;
+  document.querySelectorAll('.ob-chip').forEach(c=>c.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function obNext(){
+  // Validate current step
+  if(obStep===2){
+    const name=document.getElementById('ob-name').value.trim();
+    const email=document.getElementById('ob-email').value.trim();
+    if(!name){toast('Please enter your name');return;}
+    if(!email||!email.includes('@')){toast('Please enter a valid email');return;}
+    localStorage.setItem('sbp_trial_name',name);
+    localStorage.setItem('sbp_trial_email',email);
+  }
+  if(obStep===3){
+    const inc=parseFloat(document.getElementById('ob-income').value);
+    if(isNaN(inc)||inc<=0){toast('Please enter your monthly income');return;}
+    S.income=inc;S.baseIncome=inc;
+    const pd=parseInt(document.getElementById('ob-payday').value);
+    if(!isNaN(pd)&&pd>=1&&pd<=31)S.paydayDay=pd;
+    save();
+  }
+  if(obStep===OB_TOTAL){
+    // Finish onboarding
+    localStorage.setItem('sbp_onboarded','1');
+    document.getElementById('onboarding').style.display='none';
+    renderAll();
+    if(isPremium())showEnc();
+    return;
+  }
+  obStep++;renderObDots();renderObStep();
+  // Scroll card to top
+  document.querySelector('.ob-card').scrollTop=0;
+}
+
+function obBack(){
+  if(obStep<=1)return;
+  obStep--;renderObDots();renderObStep();
+  document.querySelector('.ob-card').scrollTop=0;
+}
+
+async function obRequestNotif(){
+  if(!('Notification' in window)){toast('Not supported');return;}
+  const p=await Notification.requestPermission();
+  const el=document.getElementById('ob-notif-status');const btn=document.getElementById('ob-notif-btn');
+  if(p==='granted'){el.textContent='✅ Notifications enabled! You will be reminded on time.';el.style.color='var(--green)';btn.textContent='✅ Enabled';}
+  else{el.textContent='You can enable this later in Settings.';el.style.color='var(--muted)';}
+}
+
+// ══════════ TIER SYSTEM (multi-device) ══════════
 function getTier(){
   const t=localStorage.getItem("sbp_tier")||"free";
   const s=localStorage.getItem("sbp_trial_start");
   if(t==="trial"&&s){if((Date.now()-new Date(s).getTime())/(1000*60*60*24)>14){localStorage.setItem("sbp_tier","expired");return"expired";}}
   return t;
 }
-function trialDaysLeft(){const s=localStorage.getItem("sbp_trial_start");if(!s)return 0;return Math.max(0,14-Math.floor((Date.now()-new Date(s).getTime())/(1000*60*60*24)));}
+function trialDaysLeft(){
+  const s=localStorage.getItem("sbp_trial_start");if(!s)return 0;
+  return Math.max(0,14-Math.floor((Date.now()-new Date(s).getTime())/(1000*60*60*24)));
+}
 function isPremium(){return["premium","trial"].includes(getTier());}
 function requirePremium(fn){if(isPremium())fn();else openPaywall();}
 function openPaywall(){document.getElementById("paywall").classList.add("open");}
 function closePaywall(){document.getElementById("paywall").classList.remove("open");}
 
+// ── Check tier from server (enables multi-device access) ──
+async function syncTierFromServer(){
+  const email=localStorage.getItem("sbp_trial_email");
+  if(!email)return; // no email stored yet, skip
+  try{
+    const res=await fetch(`${API_URL}/api/auth/status?email=${encodeURIComponent(email)}`);
+    if(!res.ok)return;
+    const data=await res.json();
+    if(!data||data.error)return;
+    // Update local storage from server truth
+    localStorage.setItem("sbp_tier",data.tier);
+    if(data.tier==="trial"&&data.trial_end){
+      // Reconstruct trial_start from trial_end (14 days back)
+      const end=new Date(data.trial_end);
+      const start=new Date(end.getTime()-(14*24*60*60*1000));
+      localStorage.setItem("sbp_trial_start",start.toISOString());
+    }
+    if(data.name)localStorage.setItem("sbp_trial_name",data.name);
+    console.log(`✅ Tier synced from server: ${data.tier} (${data.daysLeft||0} days left)`);
+  }catch(e){
+    // Server unreachable — fall back to localStorage silently
+    console.log("ℹ️ Server sync skipped — using local tier");
+  }
+}
+
 // Handle URL return from PayFast
 const urlP=new URLSearchParams(window.location.search);
-if(urlP.get("status")==="success"){localStorage.setItem("sbp_tier","premium");window.history.replaceState({},document.title,window.location.pathname);}
-if(urlP.get("trial")==="new"){if(!localStorage.getItem("sbp_trial_start")){localStorage.setItem("sbp_trial_start",new Date().toISOString());localStorage.setItem("sbp_tier","trial");}const n=decodeURIComponent(urlP.get("name")||"");if(n)localStorage.setItem("sbp_trial_name",n);window.history.replaceState({},document.title,window.location.pathname);}
+if(urlP.get("status")==="success"){
+  localStorage.setItem("sbp_tier","premium");
+  window.history.replaceState({},document.title,window.location.pathname);
+  // Sync premium status to server immediately
+  const email=localStorage.getItem("sbp_trial_email");
+  if(email){
+    fetch(`${API_URL}/api/auth/status?email=${encodeURIComponent(email)}`)
+      .then(r=>r.json()).then(d=>{if(d.tier)localStorage.setItem("sbp_tier",d.tier);}).catch(()=>{});
+  }
+}
+if(urlP.get("trial")==="new"){
+  if(!localStorage.getItem("sbp_trial_start")){
+    localStorage.setItem("sbp_trial_start",new Date().toISOString());
+    localStorage.setItem("sbp_tier","trial");
+  }
+  const n=decodeURIComponent(urlP.get("name")||"");
+  if(n)localStorage.setItem("sbp_trial_name",n);
+  window.history.replaceState({},document.title,window.location.pathname);
+}
 
 // PayFast
 function launchPayfast(){
@@ -696,10 +1004,17 @@ function pk(k){if(k==="del"){pb=pb.slice(0,-1);}else if(k==="ok"){checkPin();ret
 function updPinDots(){for(let i=0;i<4;i++)document.getElementById("pd"+i).classList.toggle("filled",i<pb.length);}
 function checkPin(){if(!S.pinEnabled||!S.pin){unlockApp();return;}if(pb===S.pin){unlockApp();}else{document.getElementById("pin-err").textContent="Incorrect PIN.";pb="";updPinDots();setTimeout(()=>document.getElementById("pin-err").textContent="",1500);}}
 function pinSkip(){if(S.pinEnabled){document.getElementById("pin-err").textContent="PIN required.";return;}unlockApp();}
-function unlockApp(){
+async function unlockApp(){
   document.getElementById("pin-lock").classList.add("hidden");
   document.getElementById("main-app").style.display="flex";
-  if(getTier()==="expired"){setTimeout(openPaywall,400);return;}
+  // Show onboarding for brand new users
+  if(shouldShowOnboarding()){
+    startOnboarding();
+    return;
+  }
+  document.getElementById("hdr-income").textContent="Syncing...";
+  await syncTierFromServer();
+  if(getTier()==="expired"){renderHeader();setTimeout(openPaywall,400);return;}
   renderAll();
   checkDueReminders();
   if(isPremium())showEnc();
@@ -998,7 +1313,18 @@ function renderSettings(){
   const tier=getTier();const name=localStorage.getItem("sbp_trial_name")||"";const email=localStorage.getItem("sbp_trial_email")||"";const dl=trialDaysLeft();
   const tLabel={free:"Free Plan",trial:`Free Trial — ${dl} day${dl!==1?"s":""} left`,premium:"⭐ Premium",expired:"Trial Expired"};
   const tColor={free:"var(--muted)",trial:"var(--amber)",premium:"var(--green)",expired:"var(--red)"};
-  document.getElementById("account-info").innerHTML=`<div style="display:flex;align-items:center;gap:10px;"><div style="width:40px;height:40px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:18px;">👤</div><div><div style="font-size:14px;font-weight:700;">${name||"User"}</div><div class="f11 clr-muted">${email||"No email set"}</div><div style="font-size:12px;font-weight:700;color:${tColor[tier]||"var(--muted)"};margin-top:2px;">${tLabel[tier]||tier}</div></div></div>`;
+  const avatar=name?avatarHTML(name,52,20):`<div class="profile-avatar" style="background:var(--dark);width:52px;height:52px;font-size:20px;">👤</div>`;
+  document.getElementById("account-info").innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;">
+      ${avatar}
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:800;">${name||"User"}</div>
+        <div class="f11 clr-muted">${email||"<span style=color:var(--amber)>No email set — complete setup</span>"}</div>
+        <div style="font-size:12px;font-weight:700;color:${tColor[tier]||"var(--muted)"};margin-top:3px;">${tLabel[tier]||tier}</div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="startOnboarding()" style="flex-shrink:0;font-size:10px;">Edit Profile</button>
+    </div>
+  `;
   document.getElementById("upgrade-cta").style.display=["free","expired","trial"].includes(tier)?"block":"none";
   document.getElementById("cancel-cta").style.display=tier==="premium"?"block":"none";
   document.getElementById("set-income").value=S.income;document.getElementById("set-payday").value=S.paydayDay||"";
